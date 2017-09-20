@@ -1,4 +1,4 @@
-// FILE: sequence1.h
+// FILE: sequence2.h
 // CLASS PROVIDED: sequence (part of the namespace CISP430_A2)
 // There is no implementation file provided for this class since it is
 // an exercise from Section 3.2 of "Data Structures and Other Objects Using C++"
