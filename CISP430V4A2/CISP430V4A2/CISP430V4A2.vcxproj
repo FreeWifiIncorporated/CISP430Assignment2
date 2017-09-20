@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="sequence.cpp" />
     <ClCompile Include="sequence_exam2.cpp" />
     <ClCompile Include="sequence_test.cpp" />
   </ItemGroup>
