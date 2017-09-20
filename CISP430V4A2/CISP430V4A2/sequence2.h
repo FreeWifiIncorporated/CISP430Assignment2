@@ -78,7 +78,7 @@
 // VALUE SEMANTICS for the sequence class:
 //    Assignments and the copy constructor may be used with sequence objects.
 //
-//void resize(size_type new_capacity )
+//void resize(size_type new_capacity)
 //Precondition: new_capacity > used
 // Postcondition: new space allocated and old space released
    
@@ -107,7 +107,7 @@ namespace CISP430_A2
         void insert(const value_type& entry);
         void attach(const value_type& entry);
         void remove_current( );
-		void resize(size_type );
+		void resize(size_type);
 		void sequence::operator =(const sequence&);
         // CONSTANT MEMBER FUNCTIONS
         size_type size( ) const;
