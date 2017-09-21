@@ -36,7 +36,7 @@ namespace CISP430_A2
 	void sequence::operator=(const sequence &)
 	{
 	}
-	size_type sequence::size() const
+	size_t sequence::size() const
 	{
 		return size_type();
 	}
@@ -44,7 +44,7 @@ namespace CISP430_A2
 	{
 		return false;
 	}
-	value_type sequence::current() const
+	double sequence::current() const
 	{
 		return value_type();
 	}
