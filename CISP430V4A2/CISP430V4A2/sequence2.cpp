@@ -13,10 +13,17 @@ namespace CISP430_A2
 		: capacity(entry), used(0), current_index(0)
 	{
 		// allocate a dynamic array on the heap
-		data = new value_type[entry];
+		data = new value_type[capacity];
 	}
 	sequence::sequence(const sequence & entry)
+		: capacity(entry.capacity), used(entry.used), current_index(0)
 	{
+		data = new value_type[capacity];
+		
+		for (int index = 0; index < entry.used; ++index)
+		{
+			data[index] = entry.data[index];
+		}
 	}
 	void sequence::start()
 	{
