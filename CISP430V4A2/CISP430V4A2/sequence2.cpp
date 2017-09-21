@@ -60,5 +60,6 @@ namespace CISP430_A2
 	}
 	sequence::~sequence()
 	{
+		delete[] data;
 	}
 }
