@@ -10,7 +10,10 @@ using namespace std;
 namespace CISP430_A2
 {
 	sequence::sequence(size_type entry)
+		: capacity(entry), used(0), current_index(0)
 	{
+		// allocate a dynamic array on the heap
+		data = new value_type[entry];
 	}
 	sequence::sequence(const sequence & entry)
 	{
