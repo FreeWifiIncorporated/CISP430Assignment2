@@ -48,7 +48,7 @@ namespace CISP430_A2
 		// If 
 		if (size() >= capacity)
 		{
-			resize(capacity * 1.1);
+			resize(capacity * 1.1); // MIGHT need size_type cast
 		}
 
 		// If 
@@ -75,20 +75,19 @@ namespace CISP430_A2
 	{
 		if (size() > capacity) // 
 		{
-			resize(size_t(capacity * 1.1); // if so increase the capacity by 10%
+			resize(size_type(capacity * 1.1)); // if so increase the capacity by 10%
 		}
 
-		if (is_item())
+		if (!is_item())
 		{
-			current_index++; // to insert after current item
-			for (size_type i = used; data[i] > current_index; --i)
-			{
-				data[i] = data[i - 1]; // insert new copy
-			}
+			current_index = used;
 		}
-		else
+
+		current_index++; // to insert after current item
+
+		for (size_type i = used; data[i] > current_index; --i)
 		{
-			// if no current item, new entry is now at front
+			data[i] = data[i - 1]; // insert new copy
 		}
 
 		data[current_index] = entry; // new item is now the current item
