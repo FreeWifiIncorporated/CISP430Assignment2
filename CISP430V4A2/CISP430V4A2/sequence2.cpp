@@ -8,7 +8,7 @@
 
 using namespace std;
 
-namespace CISP430_A2
+namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Might have to do with how the memory is being allocated tho.
 {
 	// 
 	sequence::sequence(size_type entry)
@@ -24,7 +24,7 @@ namespace CISP430_A2
 	{
 		data = new value_type[capacity];
 		
-		for (size_type index = 0; index < entry.used; ++index)
+		for (size_type index = 0; index < entry.used; ++index) // OFF BY ONE!?
 		{
 			data[index] = entry.data[index];
 		}
