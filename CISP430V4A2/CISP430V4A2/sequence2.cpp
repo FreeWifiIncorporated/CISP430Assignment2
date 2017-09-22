@@ -79,6 +79,25 @@ namespace CISP430_A2
 
 	void CISP430_A2::sequence::attach(const value_type & entry)
 	{
+		if (size() > capacity) // 
+		{
+			resize(size_t(capacity * 1.1)); // if so increase the capacity by 10%
+		}
+
+		if (is_item())
+		{
+			current_index++; // to insert after current item
+			for (size_type i = used; data[i] > current_index; --i)
+			{
+				data[i] = data[i - 1]; // insert new copy
+			}
+		}
+		else
+		{
+			// if no current item, new entry is now at front
+		}
+
+		data[current_index] = entry; // new item is now the current ite
 	}
 
 	void CISP430_A2::sequence::remove_current()
