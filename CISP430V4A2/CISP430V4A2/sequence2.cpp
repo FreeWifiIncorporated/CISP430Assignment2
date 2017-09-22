@@ -73,6 +73,9 @@ namespace CISP430_A2
 
 		//Add new entry to the front of the sequence (data[0]).
 		data[0] = entry;
+
+		//Add 1 to used to keep track of the size of the sequence.
+		++used;
 	}
 
 	void CISP430_A2::sequence::attach(const value_type & entry)
