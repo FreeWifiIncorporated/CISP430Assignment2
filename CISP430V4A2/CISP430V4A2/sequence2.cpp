@@ -57,17 +57,17 @@ namespace CISP430_A2
 			current_index = 0;
 		}
 
-		// Shift all items from the current element to the end of the sequence
-		for (size_type i = size(); data[i] >= current_index; --i)
+		// Adding an item to the list so used will increase by 1
+		++used;
+
+		// Shift all items to the right from the current element to the end of the sequence
+		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
 
 		// Insert the item into the current free element
 		data[current_index] = entry;
-
-		// Added an item to the list so used will increase by 1
-		++used;
 	}
 
 	// 
@@ -80,12 +80,17 @@ namespace CISP430_A2
 
 		if (!is_item())
 		{
-			current_index = used;
+			current_index = size();
+		}
+		else
+		{
+			current_index++; // to insert after current item
 		}
 
-		current_index++; // to insert after current item
+		// Adding an item to the list so used will increase by 1
+		++used;
 
-		for (size_type i = used; data[i] > current_index; --i)
+		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1]; // insert new copy
 		}
@@ -97,7 +102,7 @@ namespace CISP430_A2
 	void sequence::remove_current()
 	{
 		//Removes the current item from the index.
-		for (int i = current_index + 1; i < used; i++)
+		for (size_type i = current_index + 1; i < used; i++)
 		{
 			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
 		}
@@ -152,7 +157,7 @@ namespace CISP430_A2
 	bool sequence::is_item() const
 	{
 		// check if the current item is within the range of inserted items		
-		return (current_index <= used);
+		return (current_index < used);
 	}
 
 	// 
