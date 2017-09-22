@@ -71,7 +71,7 @@ namespace CISP430_A2
 		}
 
 		//Add new entry to the front of the sequence (data[0]).
-		data[0] = entry;
+		data[current_index] = entry;
 
 		//Add 1 to used to keep track of the size of the sequence.
 		++used;
