@@ -46,35 +46,37 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 	// 
 	void sequence::insert(const value_type & entry)
 	{
-		// If 
+		//Adds a new item to the front of the sequence.
+
+		//Check if size is greater than capacity. If it is, then increase the capacity by 10%
 		if (size() >= capacity)
 		{
-			resize(capacity * 1.1); // MIGHT need size_type cast
+			resize(capacity * 1.1); //Call resize to change the size of the capacity
 		}
 
-		// If 
 		if (!is_item())
 		{
+			//This checks if there is an item and if there isn't. sets current_index to 0 so that the new item is added at the front of the sequence.
 			current_index = 0;
 		}
 
-		// Adding an item to the list so used will increase by 1
-		++used;
 
-		// Shift all items to the right from the current element to the end of the sequence
+		//Shift original items to the right one to make room for the new item.
 		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
 
-		// Insert the item into the current free element
+		++used;
+
+		//Add new entry to the front of the sequence (data[0]).
 		data[current_index] = entry;
 	}
 
 	// 
 	void sequence::attach(const value_type & entry)
 	{
-		if (used > capacity) // 
+		if (used >= capacity) // 
 		{
 			resize(size_type(capacity * 1.1)); // if so increase the capacity by 10%
 		}
@@ -86,14 +88,14 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 		else
 		{
 			current_index++; // to insert after current item
-			for (size_type i = size(); i > current_index; --i)
+			for (size_type i = used; i > current_index; --i)
 			{
 				data[i] = data[i - 1]; // insert new copy
 			}
 		}
 
 		// Adding an item to the list so used will increase by 1
-		++used;
+		used++;
 
 
 
@@ -109,13 +111,15 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
 		}
 
-		--used; //Decrements used by 1 because there is now one less item in the sequence.
+		used--; //Decrements used by 1 because there is now one less item in the sequence.
 	}
 
 	// 
 	void sequence::resize(size_type newSize)
 	{
-		if (capacity > newSize)
+		//This file will allocate new space and release old space depending on if new_capacity > used.
+
+		if (newSize > used)
 		{
 			capacity = newSize;
 
@@ -126,7 +130,7 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 				tempData[index] = data[index];
 			}
 
-			delete[] data;
+			//delete[] data;
 
 			data = tempData;
 		}
@@ -135,15 +139,12 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 	// 
 	void sequence::operator=(const sequence & otherSequence)
 	{
-		capacity = otherSequence.capacity;
+		resize(size_t(otherSequence.capacity));
 		used = otherSequence.used;
-		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+		current_index = otherSequence.current_index; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
 
-		delete[] data;
 
-		data = new value_type[capacity];
-
-		for (size_type index = 0; index < otherSequence.used; ++index)
+		for (size_type index = 0; index < used; ++index)
 		{
 			data[index] = otherSequence.data[index];
 		}

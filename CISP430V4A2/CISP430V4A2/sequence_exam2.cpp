@@ -611,6 +611,7 @@ int test6( )
 
     // Test copying of a sequence with current item at the tail.
     cout << "Assignment operator test: for a sequence with cursor at tail." << endl;
+	cout << "it works" << endl;
     for (i=2; i <= 2*original.CAPACITY; i++)
         original.attach(i);
     sequence copy2;
@@ -622,6 +623,7 @@ int test6( )
         (copy2, 2*original.CAPACITY, 2*original.CAPACITY-1, items)
         )
         return 0;
+
 
     // Test copying of a sequence with cursor near the middle.
     cout << "Assignment operator test: for a sequence with cursor near middle." << endl;
