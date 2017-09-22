@@ -73,8 +73,8 @@ namespace CISP430_A2
 
 		if (is_item())
 		{
-			current_index++ // to insert after current item
-			for (i = used; data[i] > current_index; --i)
+			current_index++; // to insert after current item
+			for (int i = used; data[i] > current_index; --i)
 			{
 				data[i] = data[i - 1]; // insert new copy
 			}
