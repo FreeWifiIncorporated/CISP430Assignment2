@@ -52,15 +52,17 @@ namespace CISP430_A2
 	}
 	size_t sequence::size() const
 	{
-		return size_type();
+		return used;
 	}
 	bool sequence::is_item() const
 	{
+		// check if the current item is within the range of inserted items		
 		return (current_index <= used);
 	}
 	double sequence::current() const
 	{
-		return value_type();
+		// Returns the current item in the sequence
+		return data[current_index];
 	}
 	sequence::~sequence()
 	{
