@@ -1,4 +1,5 @@
 // Christos Papadopoulos
+// Assignment 2
 // sequence2.cpp
 //	Implementation file for sequence2.h
 
@@ -27,12 +28,15 @@ namespace CISP430_A2
 	}
 	void sequence::start()
 	{
+		current_index = 0;
 	}
 	void sequence::advance()
 	{
+		current_index++;
 	}
 	void sequence::insert(const value_type & entry)
 	{
+
 	}
 	void sequence::attach(const value_type & entry)
 	{
@@ -52,7 +56,14 @@ namespace CISP430_A2
 	}
 	bool sequence::is_item() const
 	{
-		return false;
+		if (current_index > used)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 	double sequence::current() const
 	{
