@@ -24,7 +24,7 @@ namespace CISP430_A2
 	{
 		data = new value_type[capacity];
 		
-		for (int index = 0; index < entry.used; ++index)
+		for (size_type index = 0; index < entry.used; ++index)
 		{
 			data[index] = entry.data[index];
 		}
@@ -58,7 +58,7 @@ namespace CISP430_A2
 		}
 
 		// Shift all items from the current element to the end of the sequence
-		for (int i = size(); data[i] >= current_index; --i)
+		for (size_type i = size(); data[i] >= current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
@@ -73,18 +73,37 @@ namespace CISP430_A2
 	// 
 	void sequence::attach(const value_type & entry)
 	{
-		if (size() >= capacity)
+		if (size() > capacity) // 
 		{
-			resize(capacity * 1.1);
+			resize(size_t(capacity * 1.1); // if so increase the capacity by 10%
 		}
 
+		if (is_item())
+		{
+			current_index++; // to insert after current item
+			for (size_type i = used; data[i] > current_index; --i)
+			{
+				data[i] = data[i - 1]; // insert new copy
+			}
+		}
+		else
+		{
+			// if no current item, new entry is now at front
+		}
 
+		data[current_index] = entry; // new item is now the current item
 	}
 
 	// 
 	void sequence::remove_current()
 	{
+		//Removes the current item from the index.
+		for (int i = current_index + 1; i < used; i++)
+		{
+			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
+		}
 
+		--used; //Decrements used by 1 because there is now one less item in the sequence.
 	}
 
 	// 
@@ -96,12 +115,12 @@ namespace CISP430_A2
 
 			value_type* tempData = new value_type[capacity];
 
-			for (int index = 0; index < size(); ++index)
+			for (size_type index = 0; index < size(); ++index)
 			{
 				tempData[index] = data[index];
 			}
 
-			delete data;
+			delete[] data;
 
 			data = tempData;
 		}
@@ -110,7 +129,18 @@ namespace CISP430_A2
 	// 
 	void sequence::operator=(const sequence & otherSequence)
 	{
-		
+		capacity = otherSequence.capacity;
+		used = otherSequence.used;
+		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+
+		delete[] data;
+
+		data = new value_type[capacity];
+
+		for (size_type index = 0; index < otherSequence.used; ++index)
+		{
+			data[index] = otherSequence.data[index];
+		}
 	}
 
 	// 
