@@ -20,7 +20,7 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 
 	// 
 	sequence::sequence(const sequence & entry)
-		: capacity(entry.capacity), used(entry.used), current_index(0)
+		: capacity(entry.capacity), used(entry.used), current_index(entry.current_index)
 	{
 		data = new value_type[capacity];
 		
@@ -157,7 +157,7 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 	bool sequence::is_item() const
 	{
 		// check if the current item is within the range of inserted items		
-		return (current_index < used);
+		return (current_index < size());
 	}
 
 	// 
