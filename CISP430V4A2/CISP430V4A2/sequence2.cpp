@@ -56,14 +56,7 @@ namespace CISP430_A2
 	}
 	bool sequence::is_item() const
 	{
-		if (current_index > used)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return (current_index <= used);
 	}
 	double sequence::current() const
 	{
