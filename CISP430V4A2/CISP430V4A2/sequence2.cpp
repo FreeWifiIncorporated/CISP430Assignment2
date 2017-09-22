@@ -53,10 +53,9 @@ namespace CISP430_A2
 		size_type i; //Will be used to check against current_index to see if in the right.
 
 		//Check if size is greater than capacity. If it is, then increase the capacity by 10%
-		if (size() > CAPACITY)
+		if (size() >= capacity)
 		{
-			capacity += CAPACITY * .10; //Increases the capacity of the sequence by 10% of CAPACITY.
-			//TBH, not even sure why this is needed.
+			resize(capacity * 1.1); //Call resize to change the size of the capacity
 		}
 
 		if (!is_item())
@@ -66,7 +65,7 @@ namespace CISP430_A2
 		}
 
 		//Shift original items to the right one to make room for the new item.
-		for ( i = used; data[i] > 0; --i)
+		for ( i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
@@ -104,8 +103,14 @@ namespace CISP430_A2
 	void CISP430_A2::sequence::resize(size_type new_capacity)
 	{
 		//This file will allocate new space and release old space depending on if new_capacity > used.
+		//Check if size is greater than capacity. If it is, then increase the capacity by 10%
+		if (size() >= capacity)
+		{
+			capacity += CAPACITY * .10; //Increases the capacity of the sequence by 10% of CAPACITY.
+										//TBH, not even sure why this is needed.
+		}
 
-		//Assert if 
+
 	}
 
 	void CISP430_A2::sequence::operator=(const sequence &)
