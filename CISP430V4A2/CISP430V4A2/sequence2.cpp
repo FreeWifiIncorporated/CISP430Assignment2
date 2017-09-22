@@ -1,135 +1,175 @@
-// Lorin Zhang
-// sequence.cpp is the implementation file for sequence.h
+// Christos Papadopoulos
+// Assignment 2
+// sequence2.cpp
+//	Implementation file for sequence2.h
 
 #include <cstdlib>  // Provides size_t
 #include "sequence2.h"
 
 using namespace std;
 
-namespace CISP430_A2
+namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Might have to do with how the memory is being allocated tho.
 {
+	// 
 	sequence::sequence(size_type entry)
 		: capacity(entry), used(0), current_index(0)
 	{
 		// allocate a dynamic array on the heap
 		data = new value_type[capacity];
 	}
+
+	// 
 	sequence::sequence(const sequence & entry)
 		: capacity(entry.capacity), used(entry.used), current_index(0)
 	{
 		data = new value_type[capacity];
+		current_index = entry.current_index;
 
-		for (int index = 0; index < entry.used; ++index)
+		for (size_type index = 0; index < entry.used; ++index) // OFF BY ONE!?
 		{
 			data[index] = entry.data[index];
 		}
 	}
+
+	// 
 	void sequence::start()
 	{
-		current_index = 0; // make the index back to zero to start at the beginning 
+		current_index = 0;
 	}
+
+	// 
 	void sequence::advance()
 	{
-		current_index++; // advance index up one 
+		current_index++;
 	}
+
+	// 
 	void sequence::insert(const value_type & entry)
 	{
-		//Adds a new item to the front of the sequence.
-
-		//Check if in the right spot to add a new item.
-		size_type i; //Will be used to check against current_index to see if in the right.
-
-					 //Check if size is greater than capacity. If it is, then increase the capacity by 10%
-		if (size() > CAPACITY)
+		// If 
+		if (size() >= capacity)
 		{
-			capacity += CAPACITY * .10; //Increases the capacity of the sequence by 10% of CAPACITY.
-										//TBH, not even sure why this is needed.
+			resize(capacity * 1.1); // MIGHT need size_type cast
 		}
 
+		// If 
 		if (!is_item())
 		{
-			//This checks if there is an item and if there isn't. sets current_index to 0 so that the new item is added at the front of the sequence.
 			current_index = 0;
 		}
 
-		//Shift original items to the right one to make room for the new item.
-		for (i = used; data[i] > 0; --i)
+		// Adding an item to the list so used will increase by 1
+		++used;
+
+		// Shift all items to the right from the current element to the end of the sequence
+		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
 
-		//Add new entry to the front of the sequence (data[0]).
-		data[0] = entry;
-
-		//Add 1 to used to keep track of the size of the sequence.
-		++used;
+		// Insert the item into the current free element
+		data[current_index] = entry;
 	}
+
+	// 
 	void sequence::attach(const value_type & entry)
 	{
-		if (size() > capacity) // 
+		if (used > capacity) // 
 		{
-			resize(size_t(capacity * 1.1); // if so increase the capacity by 10%
+			resize(size_type(capacity * 1.1)); // if so increase the capacity by 10%
 		}
 
-		if (is_item())
+		if (!is_item())
+		{
+			current_index = used;
+		}
+		else
 		{
 			current_index++; // to insert after current item
-			for (size_type i = used; data[i] > current_index; --i)
+			for (size_type i = size(); i > current_index; --i)
 			{
 				data[i] = data[i - 1]; // insert new copy
 			}
 		}
-		else
-		{
-			// if no current item, new entry is now at front
-		}
+
+		// Adding an item to the list so used will increase by 1
+		++used;
+
+
 
 		data[current_index] = entry; // new item is now the current item
 	}
-	void sequence::remove_current() // removes the current item, and the item after this (if valid) is the new current item
+
+	// 
+	void sequence::remove_current()
 	{
 		//Removes the current item from the index.
-		for (int i = current_index + 1; i < used; i++)
+		for (size_type i = current_index + 1; i < used; i++)
 		{
 			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
 		}
 
-		used--; //Decrements used by 1 because there is now one less item in the sequence.
+		--used; //Decrements used by 1 because there is now one less item in the sequence.
+	}
 
-				//Check if reset of capacity is needed.
-		if ((used <= CAPACITY))
+	// 
+	void sequence::resize(size_type newSize)
+	{
+		if (capacity > newSize)
 		{
-			//If the size of the sequence is less than the CAPACITY, reset the sequences capacity.
-			//This clears up some memory. Not much, but it's still some memory freed up
-			capacity = CAPACITY;
+			capacity = newSize;
+
+			value_type* tempData = new value_type[capacity];
+
+			for (size_type index = 0; index < size(); ++index)
+			{
+				tempData[index] = data[index];
+			}
+
+			delete[] data;
+
+			data = tempData;
 		}
 	}
-	void sequence::resize(size_type)
+
+	// 
+	void sequence::operator=(const sequence & otherSequence)
 	{
+		capacity = otherSequence.capacity;
+		used = otherSequence.used;
+		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+
+		delete[] data;
+
+		data = new value_type[capacity];
+
+		for (size_type index = 0; index < otherSequence.used; ++index)
+		{
+			data[index] = otherSequence.data[index];
+		}
 	}
-	void sequence::operator=(const sequence &)
-	{
-	}
+
+	// 
 	size_t sequence::size() const
 	{
-		return used; // return the number of items in the sequence 
+		return used;
 	}
-	bool sequence::is_item() const // return true if there is a current item in the current index, return flase if nothing
-	{
-		return (current_index <= used);
-	}
-	double sequence::current() const 
-	{
-		//Calls is_item() to check if the current item is an appropriate item in the sequence.
-		bool isItemGood = true;
-		isItemGood = is_item();
 
-		//If isItemGood is true, return the value of the current item to call.
-		if (isItemGood == true)
-		{
-			return data[current_index];
-		}
+	// 
+	bool sequence::is_item() const
+	{
+		// check if the current item is within the range of inserted items		
+		return (current_index < used);
 	}
+
+	// 
+	double sequence::current() const
+	{
+		// Returns the current item in the sequence
+		return data[current_index];
+	}
+
+	// 
 	sequence::~sequence()
 	{
 		delete[] data;
