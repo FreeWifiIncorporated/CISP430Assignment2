@@ -31,10 +31,7 @@ namespace CISP430_A2
 	}
 
 	void CISP430_A2::sequence::start()
-	{
-		//Make the first item of the sequence the current item.
-		//But if the sequence is empty, then there is no current item.
-		
+	{	
 		//If there is something in the sequence, get the first value in the sequence using current().
 		current_index = 0; //Resets the index back to 0 so the program is at the beginning of the sequence.
 	}
@@ -79,9 +76,9 @@ namespace CISP430_A2
 
 	void CISP430_A2::sequence::attach(const value_type & entry)
 	{
-		if (size() > capacity) // 
+		if (size() > capacity) //If the size is greater than the current capacity, call resize.
 		{
-			resize(size_t(capacity * 1.1)); // if so increase the capacity by 10%
+			resize(size_t(capacity * 1.1)); //Call resize to increase the capacity by 10%
 		}
 
 		if (is_item())
@@ -108,7 +105,7 @@ namespace CISP430_A2
 			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
 		}
 
-		used--; //Decrements used by 1 because there is now one less item in the sequence.
+		--used; //Decrements used by 1 because there is now one less item in the sequence.
 
 	}
 
@@ -133,8 +130,11 @@ namespace CISP430_A2
 		}
 	}
 
-	void CISP430_A2::sequence::operator=(const sequence &)
+	void CISP430_A2::sequence::operator=(const sequence & currentSequence)
 	{
+		sequence newSequence;
+		newSequence.capacity = currentSequence.capacity;
+		newSequence.data = currentSequence.data;
 	}
 
 	size_t CISP430_A2::sequence::size() const
