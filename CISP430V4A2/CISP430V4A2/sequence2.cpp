@@ -8,7 +8,6 @@
 
 #include "sequence2.h"
 #include <cstdlib>
-#include <cassert>
 
 namespace CISP430_A2
 {
@@ -23,8 +22,9 @@ namespace CISP430_A2
 		: capacity(entry.capacity), used(entry.used), current_index(0) //Initialize values for copy-constructor.
 	{
 		data = new value_type[capacity];
+		current_index = entry.current_index;
 
-		for (int index = 0; index < entry.used; index++)
+		for (size_type index = 0; index < entry.used; ++index)
 		{
 			data[index] = entry.data[index];
 		}
@@ -46,9 +46,6 @@ namespace CISP430_A2
 	{
 		//Adds a new item to the front of the sequence.
 
-		//Check if in the right spot to add a new item.
-		size_type i; //Will be used to check against current_index to see if in the right.
-
 		//Check if size is greater than capacity. If it is, then increase the capacity by 10%
 		if (size() >= capacity)
 		{
@@ -61,52 +58,54 @@ namespace CISP430_A2
 			current_index = 0;
 		}
 
+
 		//Shift original items to the right one to make room for the new item.
-		for ( i = size(); i > current_index; --i)
+		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
 
+		++used;
+
 		//Add new entry to the front of the sequence (data[0]).
 		data[current_index] = entry;
-
-		//Add 1 to used to keep track of the size of the sequence.
-		++used;
 	}
 
 	void CISP430_A2::sequence::attach(const value_type & entry)
 	{
-		if (size() > capacity) //If the size is greater than the current capacity, call resize.
+		if (size() > capacity) // 
 		{
-			resize(size_t(capacity * 1.1)); //Call resize to increase the capacity by 10%
+			resize(size_type(capacity * 1.1)); // if so increase the capacity by 10%
 		}
 
-		if (is_item())
+		if (!is_item())
 		{
-			current_index++; // to insert after current item
-			for (size_type i = used; data[i] > current_index; --i)
-			{
-				data[i] = data[i - 1]; // insert new copy
-			}
+			current_index = size();
 		}
 		else
 		{
-			// if no current item, new entry is now at front
+			current_index++; // to insert after current item
 		}
+			
+		for (size_type i = size(); i > current_index; --i)
+		{
+			data[i] = data[i - 1]; // insert new copy
+		}
+		
+		++used;
 
-		data[current_index] = entry; // new item is now the current ite
+		data[current_index] = entry; // new item is now the current item
 	}
 
 	void CISP430_A2::sequence::remove_current()
 	{
 		//Removes the current item from the index.
-		for (int i = current_index + 1; i < used; i++)
+		for (size_type i = current_index + 1; i < used; i++)
 		{
 			data[i - 1] = data[i]; //Takes an item in the sequence and moves it to the element before, removing the current item by shifting every item after over to the left
 		}
 
 		--used; //Decrements used by 1 because there is now one less item in the sequence.
-
 	}
 
 	void CISP430_A2::sequence::resize(size_type newSize)
@@ -119,22 +118,31 @@ namespace CISP430_A2
 
 			value_type* tempData = new value_type[capacity];
 
-			for (int index = 0; index < size(); ++index)
+			for (size_type index = 0; index < size(); ++index)
 			{
 				tempData[index] = data[index];
 			}
 
-			delete data;
+			//delete[] data;
 
 			data = tempData;
 		}
 	}
 
-	void CISP430_A2::sequence::operator=(const sequence & currentSequence)
+	void CISP430_A2::sequence::operator=(const sequence & otherSequence)
 	{
-		sequence newSequence;
-		newSequence.capacity = currentSequence.capacity;
-		newSequence.data = currentSequence.data;
+		capacity = otherSequence.capacity;
+		used = otherSequence.used;
+		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+
+		//delete[] data;
+
+		data = new value_type[capacity];
+
+		for (size_type index = 0; index < otherSequence.used; ++index)
+		{
+			data[index] = otherSequence.data[index];
+		}
 	}
 
 	size_t CISP430_A2::sequence::size() const
@@ -145,16 +153,7 @@ namespace CISP430_A2
 	bool CISP430_A2::sequence::is_item() const
 	{
 		//Check if there is an item in the current element.
-		if (current_index > used)
-		{
-			//If current_index greater, return false to is_item call.
-			return false;
-		}
-		else
-		{
-			//Else, return true.
-			return true;
-		}
+		return (current_index < used);
 	}
 
 	double CISP430_A2::sequence::current() const
