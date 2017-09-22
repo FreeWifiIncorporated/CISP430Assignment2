@@ -104,6 +104,8 @@ namespace CISP430_A2
 	void CISP430_A2::sequence::resize(size_type new_capacity)
 	{
 		//This file will allocate new space and release old space depending on if new_capacity > used.
+
+		//Assert if 
 	}
 
 	void CISP430_A2::sequence::operator=(const sequence &)
@@ -120,25 +122,20 @@ namespace CISP430_A2
 		//Check if there is an item in the current element.
 		if (current_index > used)
 		{
+			//If current_index greater, return false to is_item call.
 			return false;
 		}
 		else
 		{
+			//Else, return true.
 			return true;
 		}
 	}
 
 	double CISP430_A2::sequence::current() const
 	{
-		//Calls is_item() to check if the current item is an appropriate item in the sequence.
-		bool isItemGood = true;
-		isItemGood = is_item();
-
-		//If isItemGood is true, return the value of the current item to call.
-		if (isItemGood == true)
-		{
-			return data[current_index];
-		}
+		//If is_item is true when called, return the value of the current item to call.
+		return data[current_index];
 	}
 
 	CISP430_A2::sequence::~sequence()
