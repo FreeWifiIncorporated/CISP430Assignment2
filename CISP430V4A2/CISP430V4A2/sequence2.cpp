@@ -91,26 +91,27 @@ namespace CISP430_A2
 
 		used--; //Decrements used by 1 because there is now one less item in the sequence.
 
-		//Check if reset of capacity is needed.
-		if ((used <= CAPACITY))
-		{
-			//If the size of the sequence is less than the CAPACITY, reset the sequences capacity.
-			//This clears up some memory. Not much, but it's still some memory freed up
-			capacity = CAPACITY;
-		}
 	}
 
-	void CISP430_A2::sequence::resize(size_type new_capacity)
+	void CISP430_A2::sequence::resize(size_type newSize)
 	{
 		//This file will allocate new space and release old space depending on if new_capacity > used.
-		//Check if size is greater than capacity. If it is, then increase the capacity by 10%
-		if (size() >= capacity)
+		
+		if (capacity > newSize)
 		{
-			capacity += CAPACITY * .10; //Increases the capacity of the sequence by 10% of CAPACITY.
-										//TBH, not even sure why this is needed.
+			capacity = newSize;
+
+			value_type* tempData = new value_type[capacity];
+
+			for (int index = 0; index < size(); ++index)
+			{
+				tempData[index] = data[index];
+			}
+
+			delete data;
+
+			data = tempData;
 		}
-
-
 	}
 
 	void CISP430_A2::sequence::operator=(const sequence &)
