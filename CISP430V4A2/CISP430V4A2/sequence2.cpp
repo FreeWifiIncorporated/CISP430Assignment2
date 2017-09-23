@@ -57,14 +57,14 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 			current_index = 0;
 		}
 
-		// Adding an item to the list so used will increase by 1
-		++used;
-
 		// Shift all items to the right from the current element to the end of the sequence
 		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1];
 		}
+
+		// Adding an item to the list so used will increase by 1
+		++used;
 
 		// Insert the item into the current free element
 		data[current_index] = entry;
@@ -87,13 +87,13 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 			current_index++; // to insert after current item
 		}
 
-		// Adding an item to the list so used will increase by 1
-		++used;
-
 		for (size_type i = size(); i > current_index; --i)
 		{
 			data[i] = data[i - 1]; // insert new copy
 		}
+
+		// Adding an item to the list so used will increase by 1
+		++used;
 
 		data[current_index] = entry; // new item is now the current item
 	}
@@ -113,7 +113,7 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 	// 
 	void sequence::resize(size_type newSize)
 	{
-		if (capacity > newSize)
+		if (newSize > used)
 		{
 			capacity = newSize;
 
@@ -124,7 +124,7 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 				tempData[index] = data[index];
 			}
 
-			delete[] data;
+			//delete[] data; // doesn't work with the statement, but seems like it would cause a memory leakage problem
 
 			data = tempData;
 		}
@@ -133,15 +133,11 @@ namespace CISP430_A2 // BREAKPOINT DUE TO DESTRUCTORS, PROCEED WITH CAUTION, Mig
 	// 
 	void sequence::operator=(const sequence & otherSequence)
 	{
-		capacity = otherSequence.capacity;
+		resize(otherSequence.capacity);
 		used = otherSequence.used;
-		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+		current_index = otherSequence.current_index;
 
-		delete[] data;
-
-		data = new value_type[capacity];
-
-		for (size_type index = 0; index < otherSequence.used; ++index)
+		for (size_type index = 0; index < used; ++index)
 		{
 			data[index] = otherSequence.data[index];
 		}
