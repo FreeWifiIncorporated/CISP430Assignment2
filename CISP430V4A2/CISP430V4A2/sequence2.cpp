@@ -19,10 +19,9 @@ namespace CISP430_A2
 	}
 
 	CISP430_A2::sequence::sequence(const sequence & entry)
-		: capacity(entry.capacity), used(entry.used), current_index(0) //Initialize values for copy-constructor.
+		: capacity(entry.capacity), used(entry.used), current_index(entry.current_index) //Initialize values for copy-constructor.
 	{
 		data = new value_type[capacity];
-		current_index = entry.current_index;
 
 		for (size_type index = 0; index < entry.used; ++index)
 		{
@@ -62,7 +61,8 @@ namespace CISP430_A2
 		//Shift original items to the right one to make room for the new item.
 		for (size_type i = size(); i > current_index; --i)
 		{
-			data[i] = data[i - 1];
+			//Assign value from the previous index to the current index, one item at a time.
+			data[i] = data[i - 1]; //Shifts items in sequence
 		}
 
 		++used;
@@ -78,21 +78,24 @@ namespace CISP430_A2
 			resize(size_type(capacity * 1.1)); // if so increase the capacity by 10%
 		}
 
-		if (!is_item())
+		if (!is_item()) //Checks if there is or is not an item in the current element.
 		{
+			//If not, assign current_index to the size of the sequence to add the item to the end of the sequence.
 			current_index = size();
 		}
 		else
 		{
+			//Else, increment current_index by 1 to add item to the next element in the list.
 			current_index++; // to insert after current item
 		}
 			
 		for (size_type i = size(); i > current_index; --i)
 		{
-			data[i] = data[i - 1]; // insert new copy
+			//Assign value from the previous index to the current index, one item at a time.
+			data[i] = data[i - 1]; //Shifts items in sequence.
 		}
 		
-		++used;
+		++used; //Increase the value of used to keep track of how many items there are in the sequence.
 
 		data[current_index] = entry; // new item is now the current item
 	}
@@ -112,48 +115,46 @@ namespace CISP430_A2
 	{
 		//This file will allocate new space and release old space depending on if new_capacity > used.
 		
-		if (capacity > newSize)
+		//Check if newSize is greater than the size of the current sequence.
+		if (newSize > used)
 		{
+			//If it is, assign the newSize to capacity to increase capacity.
 			capacity = newSize;
 
 			value_type* tempData = new value_type[capacity];
 
 			for (size_type index = 0; index < size(); ++index)
 			{
+				//Copies data over to a temporary location.
 				tempData[index] = data[index];
 			}
 
-			//delete[] data;
-
-			data = tempData;
+			data = tempData; //Assigns values in temp location to new data.
 		}
 	}
 
 	void CISP430_A2::sequence::operator=(const sequence & otherSequence)
 	{
-		capacity = otherSequence.capacity;
-		used = otherSequence.used;
-		current_index = 0; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
+		resize(size_t(otherSequence.capacity)); //Calls resize to change the capacity of the new sequence.
+		used = otherSequence.used; // Assigns the used value of the passed over sequence to the new value of used.
+		current_index = otherSequence.current_index; // MIGHT CAUSE A PROBLEM IF IT NEEDS TO BE THE SAME INDEX AS THE PREVIOUS FOR THE EXAM
 
-		//delete[] data;
-
-		data = new value_type[capacity];
-
-		for (size_type index = 0; index < otherSequence.used; ++index)
+		for (size_type index = 0; index < used; ++index)
 		{
+			//For all values of index less than used, assign values from otherSequence.data[] to data[].
 			data[index] = otherSequence.data[index];
 		}
 	}
 
 	size_t CISP430_A2::sequence::size() const
 	{
-		return used;
+		return used; //Returns value of used, which is the size of the sequence.
 	}
 
 	bool CISP430_A2::sequence::is_item() const
 	{
 		//Check if there is an item in the current element.
-		return (current_index < used);
+		return (current_index < used); //Return boolian result.
 	}
 
 	double CISP430_A2::sequence::current() const
@@ -164,6 +165,6 @@ namespace CISP430_A2
 
 	CISP430_A2::sequence::~sequence()
 	{
-		delete[] data;
+		delete[] data; //Delete sequence.
 	}
 }
